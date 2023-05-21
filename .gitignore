@@ -25,4 +25,4 @@ go.work
 .vscode
 
 #env
-internal/config/.env
+#internal/config/.env

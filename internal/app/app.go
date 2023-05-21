@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"github.com/msjai/latency-ping/internal/config"
 	"github.com/msjai/latency-ping/internal/controller"
@@ -21,6 +22,11 @@ import (
 
 // Run -.
 func Run(cfg *config.Config) {
+	go func() {
+		http.Handle("/metrics", promhttp.Handler())
+		http.ListenAndServe(":2112", nil)
+	}()
+
 	l := cfg.L
 	l.Infow("starting server...")
 

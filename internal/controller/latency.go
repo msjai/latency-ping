@@ -8,6 +8,7 @@ import (
 
 	"github.com/msjai/latency-ping/internal/config"
 	"github.com/msjai/latency-ping/internal/controller/middleware"
+	"github.com/msjai/latency-ping/internal/lib"
 )
 
 const (
@@ -43,6 +44,8 @@ func newLatencyRoutes(router *chi.Mux, latencyUseCase LatencyUseCaseProviderI, c
 }
 
 func (routes *latencyRoutes) GetMinLatency(w http.ResponseWriter, r *http.Request) {
+	lib.CountMinLatencyEndpoint.Inc()
+
 	website, err := routes.latencyUseCase.GetMinLatencyLogic()
 
 	if err != nil {
@@ -61,6 +64,8 @@ func (routes *latencyRoutes) GetMinLatency(w http.ResponseWriter, r *http.Reques
 }
 
 func (routes *latencyRoutes) GetMaxLatency(w http.ResponseWriter, r *http.Request) {
+	lib.CountMaxLatencyEndpoint.Inc()
+
 	website, err := routes.latencyUseCase.GetMaxLatencyLogic()
 
 	if err != nil {
@@ -79,6 +84,8 @@ func (routes *latencyRoutes) GetMaxLatency(w http.ResponseWriter, r *http.Reques
 }
 
 func (routes *latencyRoutes) GetLatency(w http.ResponseWriter, r *http.Request) {
+	lib.CountLatencyWebSiteNameEndpoint.Inc()
+
 	siteName := chi.URLParam(r, "name")
 
 	if siteName == "/favicon.ico" {
